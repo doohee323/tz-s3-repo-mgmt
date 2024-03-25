@@ -1,0 +1,15 @@
+@Library('devops-library') _
+
+kaniko_devops2 {
+    aws_region = "us-west-1"
+    language = "golang"
+    project = "devops"
+    namespace = "devops"
+    cluster = "eks-main-t"
+    domain = "topzone.com"
+    env = "true"
+    service_url = "GIT_BRANCH-repo.NAMESPACE.CLUSTER.DOMAIN"
+    containers = [
+      [name:"tz-s3-repo-mgmt", args: ["SONARQUBE=false"]]
+    ]
+}

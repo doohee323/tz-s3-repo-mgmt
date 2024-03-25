@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+#  s3-repo:
+#    container_name: docker-s3-repo
+#    image: 's3-repo:latest'
+#    build:
+#      dockerfile: docker/s3-repo/Dockerfile
+#      context: ../
+#    environment:
+#      - DB_DRIVER=mysql
+#      - DB_HOST=s3-repo-mysql
+#      - DB_USER=root
+#      - DB_PASSWORD=
+#      - DB_NAME=devops
+#      - DB_PORT=3306
+#    ports:
+#      - '8080:8080'
+#    restart: always
+#    depends_on:
+#      - s3-repo-mysql
+  s3-repo-mysql:
+    container_name: s3-repo-mysql
+    image: s3-repo-mysql:latest
+    build: s3-repo-mysql
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=devops
+      - MYSQL_PORT=3306
+    ports:
+      - '3306:3306'
