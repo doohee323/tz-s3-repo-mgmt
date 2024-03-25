@@ -31,6 +31,7 @@ COPY --from=builder-app /build/.env /app/
 COPY --from=builder-app /build/config /app/.aws/config
 COPY --from=builder-app /build/credentials /app/.aws/credentials
 COPY --from=build-vue /app/dist /app/assets
+RUN cp -Rf /app/.aws /root/
 
 RUN apt update && \
     apt install curl telnet pkg-config mysql-client dnsutils iputils-ping jq unzip wget vim -y

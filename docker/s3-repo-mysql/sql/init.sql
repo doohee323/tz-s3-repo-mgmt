@@ -45,7 +45,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'2024-03-18 22:06:47.642','2024-03-18 22:06:47.642',NULL,'doogee','$2a$10$p6rcG5uzl2rNP0XXmztBI.BDiDqQ5awL4ccf60RVmk6rSAWaaUN6W','홍두희','doohee@topzone.com','DevOps','admin'),(2,'2024-03-18 14:30:26.075','2024-03-19 16:56:51.578',NULL,'developer','$2a$10$U1jkNZ/rcU4yOplIBUQupOS2FDpPfxafyIzynkHHnjV6h2yV2nF/m','developer','developer@topzone.com','developer','developer');
+INSERT INTO `users` VALUES (1,'2024-03-18 22:06:47.642','2024-03-18 22:06:47.642',NULL,'doogee','$2a$10$AH6eVy9p7wfb1HeM5uHRcus4DAevi1XPY.SelafThR2OPH4rZDWi6','admin','admin@topzone.com','DevOps','admin'),(2,'2024-03-18 14:30:26.075','2024-03-19 16:56:51.578',NULL,'developer','$2a$10$U1jkNZ/rcU4yOplIBUQupOS2FDpPfxafyIzynkHHnjV6h2yV2nF/m','developer','developer@topzone.com','developer','developer');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
