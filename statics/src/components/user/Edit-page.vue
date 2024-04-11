@@ -73,7 +73,7 @@ export default {
   data: function () {
     return {
       isAdmin: getCache('session', 'admin') === 'true',
-      roles: ["developer", "admin"],
+      roles: ["developer", "user", "admin"],
       vData: {
         username: this.$route.query.user,
       }

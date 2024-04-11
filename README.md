@@ -101,5 +101,3 @@ open http://localhost:8080
 open http://localhost:8080 or 
 open http://localhost:8081
 ```
-
-![s3repo.png](s3repo.png)

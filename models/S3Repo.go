@@ -41,11 +41,18 @@ func GetS3Repos(awsRegion string, s3repo string) (msg string, error error) {
 		var S3 = make(map[string]string)
 		outArry := strings.Split(out2[i], "\t")
 		if len(outArry) == 3 {
-			S3["fileName"] = outArry[0]
-			S3["filePath"] = "http://" + s3repo + ".s3-website." + awsRegion + ".amazonaws.com/" + outArry[0]
-			S3["updatedDt"] = outArry[1]
-			S3["size"] = outArry[2]
-			S3Arry = append(S3Arry, S3)
+			S3["updatedDt"] = outArry[0]
+			S3["size"] = outArry[1]
+			S3["fileName"] = outArry[2]
+			idx := strings.Index(s3repo, "/")
+			if idx > -1 {
+				S3["filePath"] = "http://" + s3repo[0:idx] + ".s3-website." + awsRegion + ".amazonaws.com/" + S3["fileName"]
+			} else {
+				S3["filePath"] = "http://" + s3repo + ".s3-website." + awsRegion + ".amazonaws.com/" + S3["fileName"]
+			}
+			if S3["size"] != "0" {
+				S3Arry = append(S3Arry, S3)
+			}
 		}
 	}
 	sort.Slice(S3Arry, func(i, j int) bool {
@@ -66,7 +73,13 @@ func DeleteS3Repo(s3repo string, object string) (msg string, error error) {
 		return "s3repo is required.", errors.New("s3repo is required.")
 	}
 	var timestamp = strconv.FormatInt(time.Now().Unix(), 10)
-	cmdName := "aws s3api delete-objects --bucket " + s3repo + " --delete '{\"Objects\": [{\"Key\": \"" + object + "\"}], \"Quiet\": false}' --output text"
+	idx := strings.Index(s3repo, "/")
+	cmdName := "aws s3 rm s3://"
+	if idx > -1 {
+		cmdName += s3repo[0:idx] + "/" + object
+	} else {
+		cmdName += s3repo + "/" + object
+	}
 	shFile := fmt.Sprintf("/tmp/essh_%s.sh", timestamp)
 	esFile, err := os.OpenFile(shFile, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0755)
 	if err != nil {
@@ -76,7 +89,7 @@ func DeleteS3Repo(s3repo string, object string) (msg string, error error) {
 	log.Printf("cmdName %s\n", cmdName)
 	esFile.WriteString(cmdName)
 	esFile.Close()
-	doc, err := exeCmd("bash "+shFile, 30)
+	doc, err := exeCmd("bash "+shFile, 10)
 	if err != nil {
 		log.Printf("bash error: %s\n", err)
 		return "bash error", err
@@ -94,7 +107,13 @@ func GetS3Repo(s3repo string, object string) (msg string, error error) {
 	if err == nil {
 		return "", nil
 	}
-	cmdName := "aws s3 cp s3://" + s3repo + "/" + object + " ./" + object
+	idx := strings.Index(s3repo, "/")
+	cmdName := "aws s3 cp s3://"
+	if idx > -1 {
+		cmdName += s3repo[0:idx] + "/" + object + " ./" + object
+	} else {
+		cmdName += s3repo + "/" + object + " ./" + object
+	}
 	doc, err := exeCmd(cmdName, 100)
 	if err != nil {
 		log.Printf("bash error: %s\n", err)
@@ -112,13 +131,15 @@ func UploadS3Repo(s3repo string, sourceFileName string, targetFileName string) (
 	if err != nil {
 		return "", nil
 	}
-	cmdName := "aws s3 cp " + sourceFileName + " s3://" + s3repo + "/" + targetFileName
+	cmdName := "aws s3 cp " + sourceFileName + " s3://" + s3repo + targetFileName
 	doc, err := exeCmd(cmdName, 100)
 	if err != nil {
 		log.Printf("bash error: %s\n", err)
 		return "bash error", err
 	}
 	log.Println(doc)
+	log.Println("========sourceFileName: " + sourceFileName)
+	os.Remove(sourceFileName)
 	return doc, nil
 }
 
@@ -129,7 +150,7 @@ type ResultDoc struct {
 
 func GetRepos(s3repo string) (msg string, error error) {
 	var timestamp = strconv.FormatInt(time.Now().Unix(), 10)
-	cmdName := "aws s3api list-objects-v2 --bucket " + s3repo + " --query 'Contents[*].[Key,LastModified,Size]' --output text"
+	cmdName := "aws s3 ls " + s3repo + " --recursive | awk '{print $1\" \"$2\"\\\t\"$3\"\\\t\"$4}'"
 	shFile := fmt.Sprintf("/tmp/essh_%s.sh", timestamp)
 	esFile, err := os.OpenFile(shFile, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0755)
 	if err != nil {
@@ -169,6 +190,28 @@ func WriteUploadFile(ifile io.Reader) (string, error) {
 	return f.Name(), nil
 }
 
+func RefreshCloudFront(cloudfront string, awsRegion string) (msg string, error error) {
+	if cloudfront == "" {
+		return "cloudfront is required.", errors.New("cloudfront is required.")
+	}
+	if awsRegion == "" {
+		return "awsRegion is required.", errors.New("awsRegion is required.")
+	}
+	var timestamp = strconv.FormatInt(time.Now().Unix(), 10)
+	shFile := fmt.Sprintf("/tmp/essh_%s.sh", timestamp)
+	esFile, err := os.OpenFile(shFile, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0755)
+	if err != nil {
+		log.Printf("esFile error: %s %s\n", esFile, err)
+		return "esFile error", err
+	}
+	cmdName := "aws cloudfront create-invalidation --distribution-id " + cloudfront + " --paths '/*' --region " + awsRegion
+	esFile.WriteString(cmdName)
+	esFile.Close()
+	doc, err := exeCmd("bash "+shFile, 30)
+	log.Println(doc)
+	return doc, nil
+}
+
 func exeCmd(str string, timeout int) (string, error) {
 	res := ResultDoc{}
 	resultChan := make(chan string)
@@ -182,7 +225,7 @@ func exeCmd(str string, timeout int) (string, error) {
 	} else {
 		parts := strings.Fields(str)
 		cmdName = parts[0]
-		args = parts[1:]
+		args = parts[1:len(parts)]
 		for n := range args {
 			if args[n] == "'Content-Type_application/json'" {
 				args[n] = "'Content-Type: application/json'"

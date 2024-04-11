@@ -78,3 +78,22 @@ func UploadHandler(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("Uploaded file %s successfully.", "")})
 }
+
+func RefreshCache(c *gin.Context) {
+	cloudfront := c.Query("cloudfront")
+	if cloudfront == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "cloudfront is required."})
+		return
+	}
+	awsRegion := c.Query("awsRegion")
+	if awsRegion == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "awsRegion is required."})
+		return
+	}
+	_, err := models.RefreshCloudFront(cloudfront, awsRegion)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Refresh Cache successfully."})
+}

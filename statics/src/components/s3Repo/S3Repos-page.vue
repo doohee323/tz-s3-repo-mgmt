@@ -44,12 +44,12 @@
         </div>
         <div class="col-lg-3">
           <button v-if="isAdmin" class="btn btn-primary float-right" @click="reloadPage">
-            <span class="fas fa-plus"></span>
+            <span class="fas fa-rotate-right"></span>
             Retrieve
           </button>
           <router-link v-if="isAdmin" :to="{name: 'Upload Image', params: {s3repo: s3repo}}"
                        class="btn btn-primary float-right">
-            <span class="fas fa-plus"></span>
+            <span class="fas fa-upload"></span>
             Upload a File
           </router-link>
         </div>
@@ -57,9 +57,9 @@
     </div>
     <div class="row">
       <div class="col-lg-12">
-        <data-table ref="s3RepoDataTable" :action-buttons="actionButtons" :cells-data="cellsData" :columnDefs="repoTableColumnDefs"
-                    :condensed="true"
-                    :entries="s3RepoEntries" :form-inline="false" :overflow-wrap="true"
+        <data-table ref="s3RepoDataTable" :cells-data="cellsData" :columnDefs="repoTableColumnDefs" :condensed="true"
+                    :entries="s3RepoEntries"
+                    :form-inline="false" :overflow-wrap="true"
                     :page-lengths="[25,50,100]" :striped="true" :zero-records-message="messages.zeroRecords" @click="clickRow"
                     @delete="$refs.confirmDeletion.show()"
                     @loadeddata="mountedData" @select="selectedS3RepoEntries=$event">
@@ -98,9 +98,10 @@ export default {
     }
     const s3Repos = getCache('config', 's3Repos').split(',');
     let s3Repo = getCache('session', 's3repo');
-    if (s3Repo === '') {
+    if (s3Repo === '' || s3Repos.indexOf(s3Repo) === -1) {
       s3Repo = s3Repos[0];
     }
+    setCache('session', 'referer', '/s3Repos');
     return {
       apiUrl: getCache('config', 'apiUrl'),
       isAdmin: getCache('session', 'admin') === 'true',
@@ -109,14 +110,7 @@ export default {
       s3repo: s3Repo,
       s3repos: s3Repos,
       s3RepoEntries: [],
-      actionButtons: this.isAdmin ? [
-        {
-          label: 'Delete',
-          icon: 'minus-square',
-          context: 'danger',
-          event: 'delete',
-        },
-      ] : null,
+      actionButtons: [],
       messages: {
         confirmDeletion: 'Confirm Item Deletion',
         zeroRecords: 'No matching items found',
@@ -133,7 +127,7 @@ export default {
   },
   methods: {
     reloadPage() {
-      this.$router.go(0);
+      this.requestData(this);
     },
     cellsData(e) {
       let link2 = `<a href="#" class="btn btn-primary btn-sm" @click="delete">
@@ -224,6 +218,7 @@ export default {
         type: "DELETE",
         success: function () {
           $this.requestData($this);
+          $this.selectedS3RepoEntries = [];
           $('.loading').hide();
           $this.$refs.confirmDeletion.hide();
         }

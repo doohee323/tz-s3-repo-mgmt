@@ -134,14 +134,18 @@ func Login(c *gin.Context) {
 	if err2 != nil {
 		log.Fatalf("Error loading .env file")
 	}
-	s3Repos := os.Getenv("S3REPOS")
 	awsRegions := os.Getenv("AWS_REGIONS")
+	s3Repos := os.Getenv("S3REPOS")
+	s3Tests := os.Getenv("S3_TESTS")
+	cfTests := os.Getenv("CF_TESTS")
 
 	c.JSON(http.StatusOK, gin.H{
 		"token": token,
 		"config": gin.H{
-			"s3Repos":    s3Repos,
 			"awsRegions": awsRegions,
+			"s3Repos":    s3Repos,
+			"s3Tests":    s3Tests,
+			"cfTests":    cfTests,
 		},
 		"user": gin.H{
 			"username":    user.Username,

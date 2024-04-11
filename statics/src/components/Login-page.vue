@@ -78,6 +78,12 @@ export default {
           if (res.config.s3Repos) {
             setCache('config', 's3Repos', res.config.s3Repos);
           }
+          if (res.config.s3Tests) {
+            setCache('config', 's3Tests', res.config.s3Tests);
+          }
+          if (res.config.cfTests) {
+            setCache('config', 'cfTests', res.config.cfTests);
+          }
           if (this.$route.name !== 'Home') {
             this.$router.push('/');
           }

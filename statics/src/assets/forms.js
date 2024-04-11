@@ -74,12 +74,6 @@ export function showMessage(isShow, status, _show_time) {
 }
 
 export function initModal() {
-    $('.modal[role=dialog] button.once').on('click', function (e) {
-        setTimeout(function () {
-            $(e.target).prop('disabled', true);
-        }, 1);
-    });
-
     $('.ajax-alert').on('close.bs.alert', function (e) {
         e.preventDefault();
         showMessage(false);

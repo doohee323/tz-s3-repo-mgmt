@@ -9,10 +9,13 @@
           <router-link :to="{name: 'Home'}" class="nav-link">Home</router-link>
         </li>
         <li v-if="hasAuths()" class="nav-item">
+          <router-link :to="{name: 'Test'}" class="nav-link">Test</router-link>
+        </li>
+        <li v-if="hasAuths() && isAdmin" class="nav-item">
           <router-link :to="{name: 'S3Repos'}" class="nav-link">S3 Repo</router-link>
         </li>
         <li v-if="hasAuths()" class="nav-item">
-          <router-link :to="{name: 'Users'}" class="nav-link">User Mgmt</router-link>
+          <router-link :to="{name: 'Users'}" class="nav-link">Users</router-link>
         </li>
       </ul>
       <form v-if="hasAuths()" id="logout" class="form-inline my-2 my-lg-0">
@@ -33,7 +36,8 @@ export default {
   data() {
     this.$root.hasAuth = getCache('session', 'hasAuth') === 'true';
     return {
-      hasAuth: this.$root.hasAuth
+      hasAuth: this.$root.hasAuth,
+      isAdmin: getCache('session', 'admin') === 'true',
     };
   },
   methods: {

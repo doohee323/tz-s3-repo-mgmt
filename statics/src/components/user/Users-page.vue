@@ -94,7 +94,7 @@ export default {
   },
   methods: {
     reloadPage() {
-      this.$router.go(0);
+      this.getItems();
     },
     cellsData(e) {
       let link = `<a href="#" class="btn btn-primary btn-sm" @click="edit">

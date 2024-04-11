@@ -74,7 +74,7 @@ import {getCache} from "@/assets/cache";
 export default {
   data: function () {
     return {
-      roles: ["developer", "admin"],
+      roles: ["developer", "user", "admin"],
       vData: {
         role: 'developer',
       }

@@ -73,6 +73,7 @@ func main() {
 			api.GET("/s3repos", controllers.S3Repos)
 			s3repo.GET("/download", controllers.Download)
 			s3repo.POST("/upload", controllers.UploadHandler)
+			s3repo.POST("/refreshCache", controllers.RefreshCache)
 		}
 	}
 
