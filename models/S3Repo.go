@@ -182,7 +182,7 @@ func exeCmd(str string, timeout int) (string, error) {
 	} else {
 		parts := strings.Fields(str)
 		cmdName = parts[0]
-		args = parts[1:len(parts)]
+		args = parts[1:]
 		for n := range args {
 			if args[n] == "'Content-Type_application/json'" {
 				args[n] = "'Content-Type: application/json'"

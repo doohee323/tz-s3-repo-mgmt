@@ -1,21 +1,21 @@
 <template>
   <div id="app">
     <div class="align-left loading">
-      <img src="./assets/loading.gif" alt=""/>
+      <img alt="" src="./assets/loading.gif"/>
     </div>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item active" v-if="hasAuths()">
+        <li v-if="hasAuths()" class="nav-item active">
           <router-link :to="{name: 'Home'}" class="nav-link">Home</router-link>
         </li>
-        <li class="nav-item" v-if="hasAuths()">
+        <li v-if="hasAuths()" class="nav-item">
           <router-link :to="{name: 'S3Repos'}" class="nav-link">S3 Repo</router-link>
         </li>
-        <li class="nav-item" v-if="hasAuths()">
+        <li v-if="hasAuths()" class="nav-item">
           <router-link :to="{name: 'Users'}" class="nav-link">User Mgmt</router-link>
         </li>
       </ul>
-      <form class="form-inline my-2 my-lg-0" id="logout" v-if="hasAuths()">
+      <form v-if="hasAuths()" id="logout" class="form-inline my-2 my-lg-0">
         <button class="btn btn-outline-success my-2 my-sm-0" @click="logout()">Logout</button>
       </form>
     </nav>

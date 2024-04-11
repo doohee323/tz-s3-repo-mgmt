@@ -2,9 +2,9 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-lg-12">
-        <confirmation-modal ref="confirmDeletion" id="confirmDeletion" :title="messages.confirmDeletion"
-                            :entries="selectedS3RepoEntries"
-                            param-name="name" :param-value="m => m.name" v-if="isAdmin" :confirm="confirm">
+        <confirmation-modal v-if="isAdmin" id="confirmDeletion" ref="confirmDeletion"
+                            :confirm="confirm"
+                            :entries="selectedS3RepoEntries" :param-value="m => m.name" :title="messages.confirmDeletion" param-name="name">
           <template #confirm>Delete</template>
         </confirmation-modal>
         <h2 class="page-header">
@@ -15,7 +15,7 @@
     <div class="row">
       <div class="col-lg-6 offset-lg-1">
         <div class="alert ajax-alert alert-dismissable d-none">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          <button aria-hidden="true" class="close" data-dismiss="alert" type="button">&times;</button>
           <p id='ajax-msg'></p>
         </div>
       </div>
@@ -23,19 +23,19 @@
     <div class="row form-main">
       <div class="col-lg-12 form-group form-inline s3repo">
         <div class="col-lg-3 form-group">
-          <label for="awsRegion" class="col-lg-5">Region</label>
-          <select name="awsRegion" id="awsRegion" class="form-control" v-model="awsRegion" @change="requestData"
-                  required data-parsley-required-message="Either device or gateway is required.">
-            <option v-for="item in awsRegions" :value="item" :key="item.id" :selected="item === awsRegion">
+          <label class="col-lg-5" for="awsRegion">Region</label>
+          <select id="awsRegion" v-model="awsRegion" class="form-control" data-parsley-required-message="Either device or gateway is required." name="awsRegion"
+                  required @change="requestData">
+            <option v-for="item in awsRegions" :key="item.id" :selected="item === awsRegion" :value="item">
               {{ item }}
             </option>
           </select>
         </div>
         <div class="col-lg-4 form-group">
-          <label for="s3repo" class="col-lg-5">S3 Repo</label>
-          <select name="s3repo" id="s3repo" class="form-control" v-model="s3repo" @change="requestData"
-                  required data-parsley-required-message="Either device or gateway is required.">
-            <option v-for="item in s3repos" :value="item" :key="item.id" :selected="item === s3repo">
+          <label class="col-lg-5" for="s3repo">S3 Repo</label>
+          <select id="s3repo" v-model="s3repo" class="form-control" data-parsley-required-message="Either device or gateway is required." name="s3repo"
+                  required @change="requestData">
+            <option v-for="item in s3repos" :key="item.id" :selected="item === s3repo" :value="item">
               {{ item }}
             </option>
           </select>
@@ -43,11 +43,12 @@
         <div class="col-lg-2 form-group">
         </div>
         <div class="col-lg-3">
-          <button class="btn btn-primary float-right" @click="reloadPage" v-if="isAdmin">
+          <button v-if="isAdmin" class="btn btn-primary float-right" @click="reloadPage">
             <span class="fas fa-plus"></span>
             Retrieve
           </button>
-          <router-link :to="{name: 'Upload Image', params: {s3repo: s3repo}}" class="btn btn-primary float-right" v-if="isAdmin">
+          <router-link v-if="isAdmin" :to="{name: 'Upload Image', params: {s3repo: s3repo}}"
+                       class="btn btn-primary float-right">
             <span class="fas fa-plus"></span>
             Upload a File
           </router-link>
@@ -56,12 +57,12 @@
     </div>
     <div class="row">
       <div class="col-lg-12">
-        <data-table ref="s3RepoDataTable" :entries="s3RepoEntries" :cells-data="cellsData" :page-lengths="[25,50,100]"
+        <data-table ref="s3RepoDataTable" :action-buttons="actionButtons" :cells-data="cellsData" :columnDefs="repoTableColumnDefs"
                     :condensed="true"
-                    :striped="true" :action-buttons="actionButtons" :zero-records-message="messages.zeroRecords"
-                    @click="clickRow" @loadeddata="mountedData" :overflow-wrap="true" :form-inline="false"
-                    :columnDefs="repoTableColumnDefs"
-                    @select="selectedS3RepoEntries=$event" @delete="$refs.confirmDeletion.show()">
+                    :entries="s3RepoEntries" :form-inline="false" :overflow-wrap="true"
+                    :page-lengths="[25,50,100]" :striped="true" :zero-records-message="messages.zeroRecords" @click="clickRow"
+                    @delete="$refs.confirmDeletion.show()"
+                    @loadeddata="mountedData" @select="selectedS3RepoEntries=$event">
           <tr>
             <th>CreateAt</th>
             <th data-class-name="enabled">FileType</th>
@@ -88,8 +89,7 @@ export default {
     confirmationModal,
     dataTable,
   },
-  props: [
-  ],
+  props: [],
   data() {
     const awsRegions = getCache('config', 'awsRegions').split(',');
     let awsRegion = getCache('session', 'awsRegion');

@@ -10,27 +10,27 @@
     <div class="row">
       <div class="col-lg-6 offset-lg-1">
         <div class="alert ajax-alert alert-dismissable d-none">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          <button aria-hidden="true" class="close" data-dismiss="alert" type="button">&times;</button>
           <p id='ajax-msg'></p>
         </div>
       </div>
     </div>
     <div class="row form-edit-main">
       <div class="col-lg-6 offset-lg-1">
-        <form method="post" id="file-upload-form" enctype="multipart/form-data"
-              class="require uploader" data-parsley-validate
-              data-parsley-excluded="input[type=button], input[type=submit], input[type=reset], input[type=hidden], .form-group row:hidden input[type=file]">
+        <form id="file-upload-form" class="require uploader" data-parsley-excluded="input[type=button], input[type=submit], input[type=reset], input[type=hidden], .form-group row:hidden input[type=file]"
+              data-parsley-validate enctype="multipart/form-data"
+              method="post">
           <div class="form-group row error-handler">
-            <label for="file" class="col-lg-3">Upgrade File</label>
+            <label class="col-lg-3" for="file">Upgrade File</label>
             <div class="col-lg-9">
               <div class="input-group">
                 <label class="input-group-btn">
                         <span class="btn btn-primary">
                             Choose File...
-                            <input id="file" name="file" type="file" class="uploader-input d-none">
+                            <input id="file" class="uploader-input d-none" name="file" type="file">
                         </span>
                 </label>
-                <input type="text" class="form-control" readonly>
+                <input class="form-control" readonly type="text">
               </div>
               <div>
                 <p id="file-info"></p>
@@ -38,10 +38,10 @@
             </div>
           </div>
           <div class="form-group row">
-            <label for="file-progress" class="col-lg-3"></label>
+            <label class="col-lg-3" for="file-progress"></label>
             <div class="col-lg-9">
               <div class="progress progress-striped progress-bg">
-                <div class="progress-bar active" id="file-progress" role="progressbar">
+                <div id="file-progress" class="progress-bar active" role="progressbar">
                 </div>
               </div>
             </div>
@@ -49,7 +49,7 @@
           <div class="form-group row">
             <div class="btn-group offset-lg-10">
               <router-link :to="{name: 'S3Repos'}" class="btn btn-secondary">Cancel</router-link>
-              <button type="button" id="apply_btn" class="btn btn-primary offset-lg-11 once" @click="upload">Upload
+              <button id="apply_btn" class="btn btn-primary offset-lg-11 once" type="button" @click="upload">Upload
               </button>
             </div>
           </div>

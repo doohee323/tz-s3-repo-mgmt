@@ -1,6 +1,7 @@
 # tz-s3-repo-mgmt
 
 -. Golang
+
 ```
 - go
     download and install 
@@ -21,6 +22,7 @@
 ```
 
 -. Env
+
 ```
 vi .env 
     DB_DRIVER=mysql
@@ -49,6 +51,7 @@ check docker/s3-repo-mysql/sql/init.sql
 ```
 
 -. build:
+
 ```
 # checkout
     cd $GOPATH/src/github.com/doohee323
@@ -87,6 +90,7 @@ open http://localhost:8080
 ```
 
 -. Test:
+
 ```
 # run Vue alone
     cd statics
@@ -97,4 +101,5 @@ open http://localhost:8080
 open http://localhost:8080 or 
 open http://localhost:8081
 ```
+
 ![s3repo.png](s3repo.png)

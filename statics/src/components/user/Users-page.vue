@@ -2,9 +2,9 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-lg-12">
-        <confirmation-modal ref="confirmDeletion" id="confirmDeletion" :title="messages.confirmDeletion"
-                            :entries="selectedUserEntries"
-                            param-name="name" :param-value="m => m.name" v-if="isAdmin" :confirm="confirm">
+        <confirmation-modal v-if="isAdmin" id="confirmDeletion" ref="confirmDeletion"
+                            :confirm="confirm"
+                            :entries="selectedUserEntries" :param-value="m => m.name" :title="messages.confirmDeletion" param-name="name">
           <template #confirm>Delete</template>
         </confirmation-modal>
         <h2 class="page-header">
@@ -14,11 +14,11 @@
     </div>
     <div class="row form-main">
       <div class="col-lg-2 offset-lg-10 form-group form-inline s3repo">
-        <router-link :to="{name: 'Add User'}" class="btn btn-primary float-right" v-if="isAdmin">
+        <router-link v-if="isAdmin" :to="{name: 'Add User'}" class="btn btn-primary float-right">
           <span class="fas fa-plus"></span>
           Add User
         </router-link>
-        <button class="btn btn-primary float-right" @click="reloadPage" v-if="isAdmin">
+        <button v-if="isAdmin" class="btn btn-primary float-right" @click="reloadPage">
           <span class="fas fa-plus"></span>
           Retrieve
         </button>
@@ -26,12 +26,12 @@
     </div>
     <div class="row">
       <div class="col-lg-12">
-        <data-table ref="usersDataTable" id="usersDataTable" :entries="usersEntries" :cells-data="cellsData"
-                    :page-lengths="[25,50,100]" :condensed="true"
-                    :striped="true" :zero-records-message="messages.zeroRecords"
-                    @click="clickRow" @loadeddata="mountedData" :overflow-wrap="true" :form-inline="false"
-                    :columnDefs="repoTableColumnDefs"
-                    @select="selectedUserEntries=$event" @delete="$refs.confirmDeletion.show()">
+        <data-table id="usersDataTable" ref="usersDataTable" :cells-data="cellsData" :columnDefs="repoTableColumnDefs"
+                    :condensed="true" :entries="usersEntries"
+                    :form-inline="false" :overflow-wrap="true"
+                    :page-lengths="[25,50,100]" :striped="true" :zero-records-message="messages.zeroRecords" @click="clickRow"
+                    @delete="$refs.confirmDeletion.show()"
+                    @loadeddata="mountedData" @select="selectedUserEntries=$event">
           <tr>
             <th>Username</th>
             <th>Name</th>

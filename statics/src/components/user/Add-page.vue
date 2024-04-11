@@ -9,46 +9,46 @@
     </div>
     <div class="row form-edit-main">
       <div class="col-lg-6 offset-lg-1">
-        <form method="post" class="require" data-parsley-validate autocomplete="off">
+        <form autocomplete="off" class="require" data-parsley-validate method="post">
           <div class="form-group row error-handler">
             <label class="col-lg-4">Username</label>
             <div class="col-lg-6">
-              <input name="username" type="text" class="form-control" required v-model="vData.username"
-                     data-parsley-validation-threshold="10" :data-parsley-minlength="5" :data-parsley-maxlength="12"
-                     :data-parsley-not-in-use="namesInUse">
+              <input v-model="vData.username" :data-parsley-maxlength="12" :data-parsley-minlength="5" :data-parsley-not-in-use="namesInUse" class="form-control"
+                     data-parsley-validation-threshold="10" name="username" required
+                     type="text">
             </div>
           </div>
           <div class="form-group row error-handler">
             <label class="col-lg-4">Password</label>
             <div class="col-lg-6">
-              <input name="password" type="password" class="form-control" required v-model="vData.password"
-                     data-parsley-validation-threshold="0">
+              <input v-model="vData.password" class="form-control" data-parsley-validation-threshold="0" name="password" required
+                     type="password">
             </div>
           </div>
           <div class="form-group row error-handler">
             <label class="col-lg-4">Name</label>
             <div class="col-lg-6">
-              <input name="name" type="text" class="form-control" required v-model="vData.name">
+              <input v-model="vData.name" class="form-control" name="name" required type="text">
             </div>
           </div>
           <div class="form-group row error-handler">
             <label class="col-lg-4">Email</label>
             <div class="col-lg-6">
-              <input name="email" type="email" class="form-control" data-parsley-type="email" required
-                     v-model="vData.email">
+              <input v-model="vData.email" class="form-control" data-parsley-type="email" name="email" required
+                     type="email">
             </div>
           </div>
           <div class="form-group row error-handler">
             <label class="col-lg-4">Description</label>
             <div class="col-lg-6">
-              <input name="description" type="text" class="form-control" v-model="vData.description">
+              <input v-model="vData.description" class="form-control" name="description" type="text">
             </div>
           </div>
           <div class="form-group row error-handler">
             <label class="col-lg-4">Role</label>
             <div class="col-lg-6">
-              <select name="role" id="role" class="form-control" v-model="vData.role">
-                <option v-for="item in roles" :value="item" :key="item.id" :selected="item === vData.role">
+              <select id="role" v-model="vData.role" class="form-control" name="role">
+                <option v-for="item in roles" :key="item.id" :selected="item === vData.role" :value="item">
                   {{ item }}
                 </option>
               </select>
@@ -57,7 +57,7 @@
           <div class="form-group row">
             <div class="btn-group offset-lg-8">
               <router-link :to="{name: 'Users'}" class="btn btn-secondary">Cancel</router-link>
-              <button type="submit" class="btn btn-primary once" @click="saveData()">Add</button>
+              <button class="btn btn-primary once" type="submit" @click="saveData()">Add</button>
             </div>
           </div>
         </form>

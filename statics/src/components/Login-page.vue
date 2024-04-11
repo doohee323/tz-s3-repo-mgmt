@@ -9,25 +9,26 @@
               <h3 class="mb-0">Login</h3>
             </div>
             <div class="card-body">
-              <form method="post" class="require" data-parsley-validate autocomplete="off">
+              <form autocomplete="off" class="require" data-parsley-validate method="post">
                 <div class="form-group error-handler">
                   <label for="username">Username</label>
-                  <input type="text" class="form-control" id="username" name="username" v-model="username" @keyup="updated"
-                         data-parsley-required data-parsley-errors-messages-disabled="true" required
+                  <input id="username" v-model="username" class="form-control" data-parsley-errors-messages-disabled="true" data-parsley-required
                          data-parsley-trigger-after-failure="keyup"
-                         data-parsley-validation-threshold="0">
+                         data-parsley-validation-threshold="0" name="username" required
+                         type="text"
+                         @keyup="updated">
                 </div>
                 <div class="form-group error-handler">
                   <label for="password">Password</label>
-                  <input type="password" class="form-control" id="password" name="password" autocomplete="off" required
-                         v-model="password" @keyup="updated">
+                  <input id="password" v-model="password" autocomplete="off" class="form-control" name="password" required
+                         type="password" @keyup="updated">
                 </div>
-                <div class="form-group error-handler" v-show="wrongAuth">
+                <div v-show="wrongAuth" class="form-group error-handler">
                   <ul class="list-unstyled help-block is-invalid col-lg-12 filled">
                     <li class="parsley-required">Wrong Password.</li>
                   </ul>
                 </div>
-                <button type="submit" class="btn btn-lg btn-success btn-block" @click="login()">
+                <button class="btn btn-lg btn-success btn-block" type="submit" @click="login()">
                   Log In
                 </button>
               </form>

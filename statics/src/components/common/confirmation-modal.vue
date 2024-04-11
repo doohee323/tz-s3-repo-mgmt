@@ -1,29 +1,29 @@
 <template>
-  <div class="modal fade" :id="id" :tabindex="tabIndex" role="dialog" :aria-labelledby="headerId">
+  <div :id="id" :aria-labelledby="headerId" :tabindex="tabIndex" class="modal fade" role="dialog">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <form method="post">
-          <input v-for="value in entries.map(paramValue)" type="hidden" :name="paramName" :value="value" :key="value">
+          <input v-for="value in entries.map(paramValue)" :key="value" :name="paramName" :value="value" type="hidden">
           <div class="modal-header">
-            <h5 class="modal-title" :id="headerId">{{ title }}</h5>
-            <button type="button" class="close" data-dismiss="modal" :aria-label="messages.cancel">
+            <h5 :id="headerId" class="modal-title">{{ title }}</h5>
+            <button :aria-label="messages.cancel" class="close" data-dismiss="modal" type="button">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body text-center">
             <div v-show="isOneEntry">
-              <slot name="one" :entry="entry"></slot>
+              <slot :entry="entry" name="one"></slot>
             </div>
             <div v-show="!isOneEntry">
-              <slot name="multiple" :entries="entries" :entry-count="entryCount"></slot>
+              <slot :entries="entries" :entry-count="entryCount" name="multiple"></slot>
             </div>
             <p v-if="permanent">This action cannot be undone.</p>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            <button class="btn btn-secondary" data-dismiss="modal" type="button">
               Cancel
             </button>
-            <button type="button" class="btn once" :class="`btn-${context}`" @click="confirm(this)">
+            <button :class="`btn-${context}`" class="btn once" type="button" @click="confirm(this)">
               <slot name="confirm">Confirm</slot>
             </button>
           </div>

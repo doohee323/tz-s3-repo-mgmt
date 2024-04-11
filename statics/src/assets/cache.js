@@ -19,6 +19,7 @@ export function setCache(group, cacheKey, cacheData, expires) {
         sessionStorage.setItem(newCacheKey + '_time', schedule);
     }
 }
+
 export function getCache(group, cacheKey) {
     try {
         let newCacheKey = getCacheKey(group, cacheKey);

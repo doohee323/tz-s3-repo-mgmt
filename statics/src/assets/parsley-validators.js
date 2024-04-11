@@ -16,9 +16,9 @@ window.Parsley.addMessages(locale, {
 window.Parsley.setLocale(locale);
 
 window.Parsley.addValidator('notInUse', {
-    validateString: function(value, requirement) {
+    validateString: function (value, requirement) {
         if (typeof requirement === 'string') requirement = requirement.split(',');
         if (typeof requirement === 'number') requirement = [requirement.toString()];
-        return $.inArray( value, requirement ) === -1;
+        return $.inArray(value, requirement) === -1;
     }
 });

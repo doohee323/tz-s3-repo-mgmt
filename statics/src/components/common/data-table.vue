@@ -1,6 +1,6 @@
 <template>
   <div>
-    <table class="table" :class="tableClasses" :name="tableId">
+    <table :class="tableClasses" :name="tableId" class="table">
       <thead>
       <slot></slot>
       </thead>

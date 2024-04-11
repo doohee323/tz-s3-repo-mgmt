@@ -6,9 +6,13 @@ const
 export let $forms;
 
 window.ParsleyConfig = {
-    classHandler: function(f) { return f.$element.closest('.error-handler'); },
+    classHandler: function (f) {
+        return f.$element.closest('.error-handler');
+    },
     errorClass: "is-invalid",
-    errorsContainer: function(f) { return f.$element.closest('.error-handler'); },
+    errorsContainer: function (f) {
+        return f.$element.closest('.error-handler');
+    },
     errorsWrapper: "<ul class='list-unstyled help-block is-invalid col-lg-12'></ul>",
     excluded: "input[type=button], input[type=submit], input[type=reset], input[type=hidden], [disabled], :hidden:not(.modal *)",
     trigger: "change keyup select"
@@ -21,10 +25,10 @@ export function initParsley($forms) {
         const $form = $(form);
         $form.off('submit.Parsley');
         const parsley = $form.parsley();
-        parsley.on('field:validated', function() {
+        parsley.on('field:validated', function () {
             $form.find(':submit').attr('disabled', !parsley.isValid());
         });
-        if (!$form.hasClass('wait')){
+        if (!$form.hasClass('wait')) {
             parsley.validate();
         } else {
             $form.find(':submit').attr('disabled', true);
@@ -59,7 +63,7 @@ export function showMessage(isShow, status, _show_time) {
         if (_show_time) {
             show_time = _show_time;
         }
-        setTimeout(function(){
+        setTimeout(function () {
             ajax_msg.text('');
             ajax_alert.addClass('d-none').removeClass('alert-danger alert-warning alert-info');
         }, show_time);
