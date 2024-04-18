@@ -74,6 +74,9 @@ check docker/s3-repo-mysql/sql/init.sql
     go get -u github.com/adrg/frontmatter
     go get -u github.com/dgrijalva/jwt-go
     go get -u github.com/gin-contrib/cors
+    go get -u go.opentelemetry.io/otel
+    go get -u go.opentelemetry.io/otel/trace
+    go get -u go.opentelemetry.io/otel/sdk
 
 # build
     go clean --cache
